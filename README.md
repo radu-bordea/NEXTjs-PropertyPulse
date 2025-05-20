@@ -9,3 +9,4 @@
 - npm i mongoose
 
 -$ openssl rand -base64 32
+- npm install next-auth
