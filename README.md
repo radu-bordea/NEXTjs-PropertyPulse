@@ -7,3 +7,5 @@
 
 # server dependencies
 - npm i mongoose
+
+-$ openssl rand -base64 32
