@@ -1,6 +1,8 @@
+import addProperty from "@/app/actions/AddProperty";
+
 const PropertyAddForm = () => {
   return (
-    <form>
+    <form action={addProperty}>
       <h2 className="text-3xl text-center font-semibold mb-6">Add Property</h2>
 
       <div className="mb-4">
