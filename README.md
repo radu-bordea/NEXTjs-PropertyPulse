@@ -10,3 +10,6 @@
 
 -$ openssl rand -base64 32
 - npm install next-auth
+
+
+- npm i cloudinary
