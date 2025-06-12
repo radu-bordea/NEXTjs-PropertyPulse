@@ -6,6 +6,7 @@ import connectDB from "@/config/database";
 import Property from "@/models/Property";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
+import { convertToSerializeableObject } from "@/utils/convertToObject";
 
 // Async server component for rendering a single property's page
 const PropertyPage = async ({ params: rawParams }) => {
@@ -16,7 +17,16 @@ const PropertyPage = async ({ params: rawParams }) => {
   const params = await rawParams;
 
   // Fetch the property by ID from the database and lean it for a plain JS object
-  const property = await Property.findById(params.id).lean();
+  const propertyDocs = await Property.findById(params.id).lean();
+  const property = convertToSerializeableObject(propertyDocs);
+
+  if (!property) {
+    return (
+      <h1 className="text-center text-2xl font-bold mt-10">
+        Property Not Found
+      </h1>
+    );
+  }
 
   return (
     <>
@@ -44,7 +54,7 @@ const PropertyPage = async ({ params: rawParams }) => {
           </div>
         </div>
       </section>
-      <PropertyImages images={property.images}/>
+      <PropertyImages images={property.images} />
     </>
   );
 };
