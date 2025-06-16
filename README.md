@@ -4,6 +4,7 @@
 # dependencies
 - npm i react-icons
 - npm i react-spinners
+- npm i react-toastify
 
 # server dependencies
 - npm i mongoose
