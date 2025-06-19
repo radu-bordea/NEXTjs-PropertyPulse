@@ -5,6 +5,8 @@
 - npm i react-icons
 - npm i react-spinners
 - npm i react-toastify
+- npm i react-geocode mapbox-gl react-map-gl
+- npm install react-map-gl@6.1.19
 
 # server dependencies
 - npm i mongoose
