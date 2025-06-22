@@ -9,7 +9,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 import BookmarkButton from "@/components/BookmarkButton";
 import ShareButtons from "@/components/ShareButtons";
-import PropertyContactForm from "@/components/PropertyContactForm";
+// import PropertyContactForm from "@/components/PropertyContactForm";
 
 // Async server component for rendering a single property's page
 const PropertyPage = async ({ params: rawParams }) => {
@@ -33,7 +33,10 @@ const PropertyPage = async ({ params: rawParams }) => {
 
   return (
     <>
+      {/* Header image */}
       <PropertyHeaderImage image={property.images[0]} />
+
+      {/* Back link */}
       <section>
         <div className="container m-auto py-6 px-6">
           <Link
@@ -44,20 +47,27 @@ const PropertyPage = async ({ params: rawParams }) => {
           </Link>
         </div>
       </section>
+
+      {/* Property Details and Sidebar */}
       <section className="bg-blue-50">
         <div className="container m-auto py-10 px-6">
-          <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
-            <PropertyDetails property={property} />
+          <div className="grid grid-cols-1 md:grid-cols-[70%_30%] w-full gap-6">
+            {/* Main property details */}
+            <div>
+              <PropertyDetails property={property} />
+            </div>
 
-            {/* <!-- Sidebar --> */}
+            {/* Sidebar */}
             <aside className="space-y-4">
               <BookmarkButton property={property} />
               <ShareButtons property={property} />
-              <PropertyContactForm property={property} />
+              {/* <PropertyContactForm property={property} /> */}
             </aside>
           </div>
         </div>
       </section>
+
+      {/* Additional images */}
       <PropertyImages images={property.images} />
     </>
   );
