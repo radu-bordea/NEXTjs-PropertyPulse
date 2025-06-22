@@ -7,6 +7,9 @@ import Property from "@/models/Property";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
+import BookmarkButton from "@/components/BookmarkButton";
+import ShareButtons from "@/components/ShareButtons";
+import PropertyContactForm from "@/components/PropertyContactForm";
 
 // Async server component for rendering a single property's page
 const PropertyPage = async ({ params: rawParams }) => {
@@ -30,10 +33,7 @@ const PropertyPage = async ({ params: rawParams }) => {
 
   return (
     <>
-      {/* Header image of the property */}
       <PropertyHeaderImage image={property.images[0]} />
-
-      {/* Navigation link to go back to the properties listing */}
       <section>
         <div className="container m-auto py-6 px-6">
           <Link
@@ -44,13 +44,17 @@ const PropertyPage = async ({ params: rawParams }) => {
           </Link>
         </div>
       </section>
-
-      {/* Property details section */}
       <section className="bg-blue-50">
         <div className="container m-auto py-10 px-6">
           <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
-            {/* Detailed information about the property */}
             <PropertyDetails property={property} />
+
+            {/* <!-- Sidebar --> */}
+            <aside className="space-y-4">
+              <BookmarkButton property={property} />
+              <ShareButtons property={property} />
+              <PropertyContactForm property={property} />
+            </aside>
           </div>
         </div>
       </section>
