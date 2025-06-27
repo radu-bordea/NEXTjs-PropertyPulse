@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useActionState } from "react";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import addMessage from "@/app/actions/AddMessage"; // Action to handle form submission
+import addMessage from "@/app/actions/addMessage"; // Action to handle form submission
 import SubmitMessageButton from "./SubmitMessageButton"; // Submit button component
 
 // Form component for users to contact the property owner
