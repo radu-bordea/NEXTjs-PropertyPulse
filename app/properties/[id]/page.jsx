@@ -9,7 +9,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 import BookmarkButton from "@/components/BookmarkButton";
 import ShareButtons from "@/components/ShareButtons";
-// import PropertyContactForm from "@/components/PropertyContactForm";
+import PropertyContactForm from "@/components/PropertyContactForm";
 
 // Async server component for rendering a single property's page
 const PropertyPage = async ({ params: rawParams }) => {
@@ -61,7 +61,7 @@ const PropertyPage = async ({ params: rawParams }) => {
             <aside className="space-y-4">
               <BookmarkButton property={property} />
               <ShareButtons property={property} />
-              {/* <PropertyContactForm property={property} /> */}
+              <PropertyContactForm property={property} />
             </aside>
           </div>
         </div>
