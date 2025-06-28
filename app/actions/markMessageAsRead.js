@@ -1,47 +1,45 @@
-"use server"; // Indicates this file is meant to run on the server side
+"use server";
 
-// Import database connection, model, session helper, and revalidation utility
-const connectDB = require("@/config/database");
-const Message = require("@/models/Message");
-const { getSessionUser } = require("@/utils/getSessionUser");
-import { revalidatePath } from "next/cache";
+import connectDB from "@/config/database"; // Connect to MongoDB
+import Message from "@/models/Message"; // Mongoose model for messages
+import { getSessionUser } from "@/utils/getSessionUser"; // Utility to retrieve the current session user
+import { revalidatePath } from "next/cache"; // Revalidate the messages page after update
 
-// Server action to toggle the read status of a message
 async function markMessageAsRead(messageId) {
-  // Ensure database is connected
+  // Establish a database connection
   await connectDB();
 
-  // Get the current logged-in user from the session
+  // Get the currently authenticated user from session
   const sessionUser = await getSessionUser();
 
-  // Ensure we have a valid user
-  if (!sessionUser || !sessionUser.userId) {
-    return { error: "User ID is required" };
+  // Ensure a valid session and user are present
+  if (!sessionUser || !sessionUser.user) {
+    throw new Error("User ID is required");
   }
 
   const { userId } = sessionUser;
 
-  // Find the message by its ID
+  // Retrieve the message by its ID
   const message = await Message.findById(messageId);
 
-  // Throw an error if message is not found
+  // Handle case where the message doesn't exist
   if (!message) throw new Error("Message not found");
 
-  // Check if the message recipient matches the current user
+  // Ensure the logged-in user is the intended recipient of the message
   if (message.recipient.toString() !== userId) {
-    throw new Error("Unauthorized");
+    return new Response("Unauthorized", { status: 401 });
   }
 
-  // Toggle the read status
+  // Toggle the read status of the message
   message.read = !message.read;
 
-  // Trigger a revalidation of the messages page for fresh data
+  // Revalidate the messages page to reflect the updated state
   revalidatePath("/messages", "page");
 
-  // Save the updated message
+  // Persist the updated message state
   await message.save();
 
-  // Return the new read status
+  // Return the updated read status as a plain value
   return message.read;
 }
 

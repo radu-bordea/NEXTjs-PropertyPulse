@@ -1,43 +1,47 @@
 "use server";
 
-// Import required modules and configurations
-import connectDB from "@/config/database";
-import Message from "@/models/Message";
-import { getSessionUser } from "@/utils/getSessionUser";
+import connectDB from "@/config/database"; // Connect to the MongoDB database
+import Message from "@/models/Message"; // Mongoose model for messages
+import { getSessionUser } from "@/utils/getSessionUser"; // Utility to retrieve the session user
+import { revalidatePath } from "next/cache"; // (Optional import here if unused)
 
-// Main function to add a new property
 async function addMessage(previousState, formData) {
-  // Connect to the MongoDB database
+  // Establish a connection to the database
   await connectDB();
 
-  // Get the current session user
+  // Retrieve the currently logged-in user
   const sessionUser = await getSessionUser();
 
-  // Ensure user is authenticated and has a valid user ID
-  if (!sessionUser || !sessionUser.userId) {
-    throw new Error("User ID is required");
+  // Return error if user is not authenticated
+  if (!sessionUser || !sessionUser.user) {
+    return { error: "You must be logged in to send a message" };
   }
 
-  const { userId } = sessionUser;
+  const { user } = sessionUser;
 
-  const recepient = formData.get("recipient");
+  // Extract recipient from form data
+  const recipient = formData.get("recipient");
 
-  if (userId === recepient) {
+  // Prevent users from messaging themselves
+  if (user.id === recipient) {
     return { error: "You can not send a message to yourself" };
   }
 
+  // Create a new message document using form data
   const newMessage = new Message({
-    sender: userId,
-    recepient,
+    sender: user.id,
+    recipient,
     property: formData.get("property"),
     name: formData.get("name"),
     email: formData.get("email"),
     phone: formData.get("phone"),
-    body: formData.get("body"),
+    body: formData.get("message"),
   });
 
+  // Save the message to the database
   await newMessage.save();
 
+  // Return success response
   return { submitted: true };
 }
 
